@@ -1,4 +1,4 @@
-function [W, alpha,V,Cov_mean_train] = SBLEST(X,Y, Maxiters,K, tau, e)
+function [W, alpha, V, Cov_mean_train] = SBLEST(X, Y, Maxiters, K, tau, e)
 % ************************************************************************
 % SBLEST    : Spatio-Temporal-filtering-based single-trial EEG classification
 %
@@ -13,9 +13,10 @@ function [W, alpha,V,Cov_mean_train] = SBLEST(X,Y, Maxiters,K, tau, e)
 %
 % --- Output ---
 % W         : The estimated low-rank matrix
-% alpha     : The classifier parameter
-% V         : Each column of V represents a spatio-temporal filter
-% Cov_mean_train ; Averaged covariance matrix of train set (using for whittening in test stage)
+% alpha     : The classifier parameter (eigenvalues of W)
+% V         : Each column of V represents a spatio-temporal filter (eigenvectors of W)
+% Cov_mean_train : Averaged covariance matrix of train set (2 C^2 * 2 C^2)
+%                  (using for whittening and logarithm transform in test stage)
 
 % Reference:
 
@@ -23,14 +24,14 @@ function [W, alpha,V,Cov_mean_train] = SBLEST(X,Y, Maxiters,K, tau, e)
 
 % ************************************************************************
 
-[R_train,Cov_mean_train] = Enhanced_cov_train(X,K,tau);
+[R_train, Cov_mean_train] = Enhanced_cov_train(X, K, tau);
 
 %% Check properties of R
-[M, D_R] = size(R_train); % M: # of samples;D_R: dimention of vec(R_m)
+[M, D_R] = size(R_train); % M: # of samples; D_R: dimention of vec(R_m)
 KC = round(sqrt(D_R));
-epsilon =e;
-Loss_old = 0;
-threshold = 0.05;
+epsilon = e;
+Loss_old = 1e12;
+threshold = 0.05; % 
 if (D_R ~= KC^2)
     disp('ERROR: Columns of A do not align with square matrix');
     return;
@@ -46,13 +47,10 @@ for c = 1:M
 end
 
 %% Initializations
-
 U = zeros(KC,KC); % The estimated low-rank matrix W set to be Zeros
-
 Psi = eye(KC); % the covariance matrix of Gaussian prior distribution is initialized to be Unit diagonal matrix
-
 lambda = 1;% the variance of the additive noise set to 1 by default
-
+ 
 %% Optimization loop
 for i = 1:Maxiters
    %% Compute estimate of X 
@@ -75,7 +73,7 @@ for i = 1:Maxiters
     SR = Sigma_y\R_train;
     for c = 1:KC
         start = (c-1)*KC + 1; stop = start + KC - 1;
-        Phi{1,c} = Psi -Psi * ( R_train(:,start:stop)'*SR(:,start:stop) ) * Psi;
+        Phi{1,c} = Psi - Psi * ( R_train(:,start:stop)' * SR(:,start:stop) ) * Psi;
     end
     
     %% Update covariance parameters Psi: Gx
@@ -85,7 +83,7 @@ for i = 1:Maxiters
         PHI = PHI +  Phi{1,c};
         UU = UU + U(:,c) * U(:,c)';
     end
-    Psi = ( (UU + UU')/2 + (PHI + PHI')/2 )/KC;% make sure Psi is symmetric
+    Psi = ( (UU + UU')/2 + (PHI + PHI')/2 )/KC; % make sure Psi is symmetric
 
    %% Update lambda
    theta = 0;
@@ -96,8 +94,8 @@ for i = 1:Maxiters
     lambda = (sum((Y-R_train*u).^2) + theta)/M;  
 
    %% Output display and  convergence judgement
-        Loss = Y'*Sigma_y^(-1)*Y + log(det(Sigma_y));        
-        delta_loss = norm(Loss_old-Loss,'fro')/norm( Loss_old,'fro');  
+        Loss = Y'*Sigma_y^(-1)*Y + log(det(Sigma_y));         
+        delta_loss = abs(Loss_old-Loss)/abs( Loss_old);
         if (delta_loss < epsilon)
             disp('EXIT: Change in Loss below threshold');
             break;
@@ -107,68 +105,71 @@ for i = 1:Maxiters
             disp(['Iterations: ', num2str(i),  '  lambda: ', num2str(lambda),'  Loss: ', num2str(Loss), '  Delta_Loss: ', num2str(delta_loss)]);
          end   
 end
-     %% Eigendecomposition of W
+    %% Eigendecomposition of W
      W = U;
-     [~,D,V_all] = eig(W);% each column of V represents a spatio-temporal filter
+     [~, D, V_all] = eig(W); % each column of V represents a spatio-temporal filter
      alpha_all = diag(D); % classifier parameters
      %% Select L pairs of spatio-temporal filters V and classifier parameters alpha
-    d = abs(diag(D)); 
-    d_max = max(d); 
+    d = abs(diag(D)); d_max = max(d); 
     w_norm = d/d_max; % normalize eigenvalues of W by the maximum eigenvalue
     index = find(w_norm > threshold); % find index of selected V by pre-defined threshold,.e.g., 0.05
-    V = V_all(index);alpha = alpha_all(index);% select V and alpha by index   
+    V = V_all(index); alpha = alpha_all(index);% select V and alpha by index   
 end
 
-function [R_train,Cov_mean_train] = Enhanced_cov_train(X,K,tau)
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function [R_train, Cov_mean_train] = Enhanced_cov_train(X, K, tau)
 % ************************************************************************
 % Compute Enhanced covariace matrix of train set
 % Input :
 % K         : Order of FIR filter
 % tau       : time delay parameter
-% X         : M EEG signals from train set
+% X         : EEG signals from train set, # trials is M
 
 % Output    :
-% R         :Enhanced covariace matrix of train set
-% Cov_mean_train : Averaged covariance matrix of train set (using for whittening in test stage)
+% R         :Enhanced covariace matrix of train set (M * 4 C^2)
+% Cov_mean_train : Averaged covariance matrix of train set (2 C^2 * 2 C^2)
+%                 (using for whittening and logarithm transform in test stage)
 % ************************************************************************
 
 %  Initializaiton 
-M = length(X);
-[C,T] = size(X{1,1});
-KC = K*C;
-Cov = cell(1,M);
-Sig_Cov = zeros(KC,KC);
+M = length(X); % M: # trials
+[C,T] = size(X{1,1}); % C: # recorded channels, T: # sampled time points
+KC = K*C; % KC: # augmented covariance matrices
+Cov = cell(1, M);
+Sig_Cov = zeros(KC, KC);
 for m = 1:M
     X_m = X{1,m};
     X_m_hat = [];
      
     % Generate augument EEG data
-    for k = 1:K
+    for k = 1 : K
         n_delay = (k-1)*tau;
-        if n_delay ==0
+        if n_delay == 0
             X_order_k = X_m;
         else
             X_order_k(:,1:n_delay) = 0;
             X_order_k(:,n_delay+1:T) = X_m(:,1:T-n_delay);
         end
-        X_m_hat = cat(1,X_m_hat,X_order_k);
+        X_m_hat = cat(1, X_m_hat, X_order_k);
     end
     
-    % Compute covariance matrices and trace normalizaiton
+    % Compute covariance matrices with trace normalizaiton
     Cov{1,m} = X_m_hat*X_m_hat';
     Cov{1,m}= Cov{1,m}/trace(Cov{1,m}); 
     Sig_Cov = Sig_Cov + Cov{1,m};
 end
 
-% compute averaged covariance matrix of train set
-Cov_mean_train =Sig_Cov/M;
+% compute averaged covariance matrix of training set
+Cov_mean_train = Sig_Cov/M;
 
-% Whitenning, logarithm transform and reshape
-Cov_whiten = zeros(M,KC,KC);
+% Whitenning, Logarithm transform, and Vectorization
+Cov_whiten = zeros(M, KC, KC);
 for m = 1:M
-    temp_cov= Cov_mean_train^(-1/2)*Cov{1,m}*Cov_mean_train^(-1/2);% whiten
-     Cov_whiten(m,:,:)  = (temp_cov + temp_cov')/2; 
-    R_train(m,:) =  vec(logm(squeeze(Cov_whiten(m,:,:))));% logm
+    temp_cov = Cov_mean_train^(-1/2)*Cov{1,m}*Cov_mean_train^(-1/2);% whiten
+    Cov_whiten(m,:,:)  = (temp_cov + temp_cov')/2; 
+    R_m =logm(squeeze(Cov_whiten(m,:,:))); % logarithm transform
+    R_m = R_m(:); % column-wise vectorization
+    R_train(m,:) =  R_m';
 end 
 end
 

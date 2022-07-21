@@ -1,29 +1,33 @@
+
 clc; clear; close all;
 
 %% load data : subject L1 from Dataset II ( "foot" vs "tongue")
 load('Dataset2_L1_FootTongue_train.mat');
 load('Dataset2_L1_FootTongue_test.mat');
 tau_selected = 1; % "tau_selected =1" for this subset is selected from CV
+
 %% Initialization
 Maxiters = 5000; % Pre-defined maximum iterations (5000 in this paper)
-e = 2e-4;% Pre-defined threshold for break condition (2e-4 in this papter)
+e = 2e-4; % Pre-defined threshold for break condition (2e-4 in this papter)
 tau = tau_selected;
-if tau==0
-    K=1;
+if tau == 0
+    K = 1;
 else
-    K=2;
+    K = 2;
 end
 %% Trainning stage: run SBLEST 
 disp(['Order: ', num2str(K),  '      Time delay: ', num2str(tau)]);
-disp('Running SBLEST : update W, bias, psi and lambda');
-[W, alpha,V,Cov_mean_train] = SBLEST(X_train, Y_train, Maxiters,K,tau,e);
+disp('Running SBLEST : update W, psi and lambda');
+[W, alpha, V, Cov_mean_train] = SBLEST(X_train, Y_train, Maxiters, K, tau, e);
+
 %% Test stage : predicte test label
-[R_test] = Enhanced_cov_test(X_test,K,tau,Cov_mean_train);
+[R_test] = Enhanced_cov_test(X_test, K, tau, Cov_mean_train);
 predict_Y = R_test*vec(W);
 [accuracy] = compute_acc (predict_Y, Y_test);
 disp(['Test   Accuracy: ', num2str(accuracy)]);
 
- 
+
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function [R_test] = Enhanced_cov_test(X,K,tau,Cov_mean_train)
 % ************************************************************************
 % Compute Enhanced covariace matrix of test set
@@ -33,7 +37,7 @@ function [R_test] = Enhanced_cov_test(X,K,tau,Cov_mean_train)
 % X         : M EEG signals from test set
 
 % Output    :
-% R_test         :Enhanced covariace matrix of test set
+% R_test    : Enhanced covariace matrix of test set
 % ************************************************************************
 %  Initializaiton 
 M = length(X); 
@@ -68,9 +72,20 @@ for m = 1:M
     Cov_whiten(m,:,:) = Cov_mean_train^(-1/2)*Cov{1,m}*Cov_mean_train^(-1/2);
     R_test(m,:) =  vec(logm(squeeze(Cov_whiten(m,:,:))));
 end 
+
+
+% Whitenning, Logarithm transform, and Vectorization
+Cov_whiten = zeros(M, KC, KC);
+for m = 1:M
+    temp_cov = Cov_mean_train^(-1/2)*Cov{1,m}*Cov_mean_train^(-1/2);
+    Cov_whiten(m,:,:) = (temp_cov + temp_cov')/2; 
+    R_m =logm(squeeze(Cov_whiten(m,:,:))); % logarithm transform
+    R_m = R_m(:); % column-wise vectorization
+    R_test(m,:) = R_m';   
+end 
 end
 
-
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 function [accuracy] = compute_acc (predict_Y, Y_test)
 % Calculate class label 
 Y_predict = zeros(length(predict_Y),1);
@@ -91,3 +106,4 @@ for i = 1:total_num
 end
 accuracy = (total_num-error_num)/total_num;
 end
+
