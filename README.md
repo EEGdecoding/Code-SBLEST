@@ -11,7 +11,7 @@ All scripts are written in MATLAB and have been tested with MATLAB R2018b.
 
 * [SBLEST_main.m](https://github.com/EEGdecoding/Code-SBLEST/blob/main/SBLEST_main.m)  — An example code for classifying single-trial EEG data using SBLEST.
 
-* [Dataset2_L1_FootTongue_train.mat](https://github.com/EEGdecoding/Code-SBLEST/blob/main/Dataset2_L1_FootTongue_train.mat) — Training data used in SBLEST_main.m. The data is from Subject L1 (foot vs. tongue) in Dataset 2 used in the paper.
+* [Dataset2_L1_FootTongue_train.mat](https://github.com/EEGdecoding/Code-SBLEST/blob/main/Dataset2_L1_FootTongue_train.mat) — Training data used in SBLEST_main.m. The data is from Subject L1 (foot vs. tongue) in Dataset II used in the paper.
 
 * [Dataset2_L1_FootTongue_test.mat](https://github.com/EEGdecoding/Code-SBLEST/blob/main/Dataset2_L1_FootTongue_test.mat) —  Test data used in SBLEST_main.m.
 
