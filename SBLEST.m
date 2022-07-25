@@ -18,7 +18,7 @@ function [W, alpha, V, Wh] = SBLEST(X, Y, K, tau)
 % Wh        : Whitening matrix for enhancing covariance matrices (required for prediction on test set). [(K*C)^2, (K*C)^2].
 
 % Reference:
-%¡°W. Wang, F. Qi, D. Wipf, C. Can, T. Yu, Z. Gu, E. N. Brown, Z. Yu, W. Wu. Sparse Bayesian Learning for End-to-End EEG Decoding (under review)¡±
+% "W. Wang, F. Qi, D. Wipf, C. Can, T. Yu, Z. Gu, E. N. Brown, Z. Yu, W. Wu. Sparse Bayesian Learning for End-to-End EEG Decoding (under review)"
 %
 % Wenlong Wang, Feifei Qi, Wei Wu, 2022.
 % Email: 201710102248@mail.scut.edu.cn

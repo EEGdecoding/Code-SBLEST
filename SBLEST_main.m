@@ -30,12 +30,12 @@ function R_test = Enhanced_cov_test(X, K, tau, Wh)
 % Compute enhanced covariace matrices of test set
 %
 % Inputs :
-% X         : EEG signals ofm test set
+% X         : EEG signals of test set
 % K         : Order of FIR filter
 % tau       : Time delay parameter
 % Wh        : Whitening matrix for enhancing covariance matrices
 
-% Output    :
+% Outputs   :
 % R_test    : Enhanced covariace matrices of test set
 % ************************************************************************
 [C, T, M] = size(X);
