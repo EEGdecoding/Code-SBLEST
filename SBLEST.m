@@ -64,10 +64,10 @@ for i = 1:5000
     end
     
     Sigma_y = RPR + lambda*eye(M);
-    u = B*(Sigma_y\Y ); % maximum a posterior estimation of u
-    U = reshape(u, KC, KC);
-    U = (U + U')/2; % make sure U is symmetric
-    
+    uc = B*(Sigma_y\Y ); % maximum a posterior estimation of uc
+    Uc = reshape(uc, KC, KC);
+    U = (Uc + Uc')/2; 
+    u = U(:);
     %% Update Phi (dual variable of Psi)
     Phi = cell(1, KC);
     SR = Sigma_y\R_train;
@@ -83,7 +83,7 @@ for i = 1:5000
         PHI = PHI +  Phi{1, c};
         UU = UU + U(:,c) * U(:,c)';
     end
-    Psi = ( (UU + UU')/2 + (PHI + PHI')/2 )/KC; % make sure Psi is symmetric
+    Psi = ((UU + UU')/2 + (PHI + PHI')/2 )/KC; % make sure Psi is symmetric
     
     %% Update theta (dual variable of lambda) and lambda
     theta = 0;
