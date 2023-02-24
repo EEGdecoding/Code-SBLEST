@@ -20,7 +20,7 @@ disp('Running SBLEST : update W, Psi and lambda');
 
 %% Test stage : predicte labels in the test set
 R_test = Enhanced_cov_test(X_test, K, tau, Wh);
-predict_Y = R_test*vec(W);
+predict_Y = R_test*W(:);
 accuracy = compute_acc (predict_Y, Y_test);
 disp(['Test   Accuracy: ', num2str(accuracy)]);
 
