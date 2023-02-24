@@ -113,7 +113,7 @@ alpha_all = diag(D); % classifier weights
 d = abs(diag(D)); d_max = max(d);
 w_norm = d/d_max; % normalize eigenvalues of W by the maximum eigenvalue
 index = find(w_norm > threshold); % indices of selected V according to a pre-defined threshold,.e.g., 0.05
-V = V_all(index); alpha = alpha_all(index);
+V = V_all(:,index); alpha = alpha_all(index);
 end
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
