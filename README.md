@@ -1,7 +1,7 @@
 # Code-SBLEST
 
 This repo provides the MATLAB code for the Sparse Bayesian Learning for End-to-end Spatio-Temporal-filtering-based single-trial EEG
-classification (SBLEST) algorithm, which is presented in “W. Wang, F. Qi, D. Wipf, C. Can, T. Yu, Z. Gu, E. N. Brown, Z. Yu, W. Wu. Sparse Bayesian Learning for End-to-End EEG Decoding (under review)”. 
+classification (SBLEST) algorithm, which is presented in “W. Wang, F. Qi, D. Wipf, C. Can, T. Yu, Z. Gu, Y. Li, Z. Yu, W. Wu. Sparse Bayesian Learning for End-to-End EEG Decoding (under review)”. 
 
 All scripts are written in MATLAB and have been tested with MATLAB R2018b.
 
