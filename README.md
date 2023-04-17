@@ -25,13 +25,13 @@ All scripts SBLEST are written in MATLAB and have been tested with MATLAB R2018b
  SBLEST_main
  ```
  
- ## Python Implementation of sCNN, dCNN, EEGNet, EEG-Inception, and EEGSym
+ ## Python Implementations of sCNN, dCNN, EEGNet, EEG-Inception, and EEGSym
  
-sCNN and dCNN are implemented in PyTorch using the braindecode package, which can be found at https://github.com/robintibor/braindecode.
+sCNN and dCNN are implemented in PyTorch using the braindecode package, which is provided at https://github.com/robintibor/braindecode.
 
-EEGNet is implemented in TensorFlow using the Keras API, with the model provided in https://github.com/vlawhern/arl-eegmodels.
+EEGNet is implemented in TensorFlow using the Keras API, with the model provided at https://github.com/vlawhern/arl-eegmodels.
 
-EEG-inception and EEGSym are also implemented in TensorFlow, with the models provided in https://github.com/esantamariavazquez/EEGInception and https://github.com/Serpeve/EEGSym respectively.
+EEG-inception and EEGSym are also implemented in TensorFlow, with the models provided at https://github.com/esantamariavazquez/EEGInception and https://github.com/Serpeve/EEGSym, respectively.
 
 ### File Descriptions
 
@@ -40,17 +40,16 @@ EEG-inception and EEGSym are also implemented in TensorFlow, with the models pro
 * [dCNN_main.py](https://github.com/EEGdecoding/Code-SBLEST/blob/main/dCNN_main.py)   — An example code for classifying single-trial EEG data using dCNN.
 
 * [EEGNet_main.py](https://github.com/EEGdecoding/Code-SBLEST/blob/main/EEGNet_main.py)   — An example code for classifying single-trial EEG data using EEGNet.
-* [EEGModels.py](https://github.com/EEGdecoding/Code-SBLEST/blob/main/EEGModels.py)   — A model file used in EEGNet implementation.
+* [EEGModels.py](https://github.com/EEGdecoding/Code-SBLEST/blob/main/EEGModels.py)   — A model file used in the EEGNet implementation.
 
 * [EEGInception_main.py](https://github.com/EEGdecoding/Code-SBLEST/blob/main/EEGInception_main.py)   — An example code for classifying single-trial EEG data using EEG-inception.
-* [EEGInception.py](https://github.com/EEGdecoding/Code-SBLEST/blob/main/EEGInception.py)   — A model file used in EEG-inception implementation.
+* [EEGInception.py](https://github.com/EEGdecoding/Code-SBLEST/blob/main/EEGInception.py)   — A model file used in the EEG-inception implementation.
 
 * [EEGSym_main.py](https://github.com/EEGdecoding/Code-SBLEST/blob/main/EEGSym.py)   — An example code for classifying single-trial EEG data using EEGSym.
-* [EEGSym_architecture.py](https://github.com/EEGdecoding/Code-SBLEST/blob/main/EEGSym_architecture.py)   — A model file used in EEGSym implementation.
-* [EEGSym_DataAugmentation.py](https://github.com/EEGdecoding/Code-SBLEST/blob/main/EEGSym_DataAugmentation.py)   — A python file for data augumentation used in EEGSym implementation.
+* [EEGSym_architecture.py](https://github.com/EEGdecoding/Code-SBLEST/blob/main/EEGSym_architecture.py)   — A model file used in the EEGSym implementation.
+* [EEGSym_DataAugmentation.py](https://github.com/EEGdecoding/Code-SBLEST/blob/main/EEGSym_DataAugmentation.py)   — A python file for data augmentation used in the EEGSym implementation.
 
-* [signal_target.py](https://github.com/EEGdecoding/Code-SBLEST/blob/main/signal_target.py)   — A code for preprocessing the signal and target used in all cNNs implementation.
-
+* [signal_target.py](https://github.com/EEGdecoding/Code-SBLEST/blob/main/signal_target.py)   — A code for preprocessing the signal and target used in all the cNNs implementations.
 
 
 
