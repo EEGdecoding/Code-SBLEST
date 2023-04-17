@@ -1,27 +1,31 @@
+import logging
+import os.path
+import time
+import sys
+from scipy.io import loadmat
+from braindecode.datautil.signal_target import SignalAndTarget
+import numpy as np
+
 import random
 import torch
-import numpy as np
+
 import torch.nn.functional as F
 from torch import optim
-from braindecode.datautil.signal_target import SignalAndTarget
-import logging
-import sys
-import os
-from scipy.io import loadmat
+import torch as th
+
 from braindecode.models.deep4 import Deep4Net
+from braindecode.models.util import to_dense_prediction_model
 from braindecode.experiments.experiment import Experiment
-from braindecode.experiments.monitors import (
-    LossMonitor,
-    MisclassMonitor,
-    RuntimeMonitor,
-)
+from braindecode.experiments.monitors import LossMonitor, MisclassMonitor, \
+    RuntimeMonitor, CroppedTrialMisclassMonitor
 from braindecode.experiments.stopcriteria import MaxEpochs, NoDecrease, Or
-from braindecode.datautil.iterators import BalancedBatchSizeIterator
+from braindecode.datautil.iterators import CropsFromTrialsIterator
 from braindecode.models.shallow_fbcsp import ShallowFBCSPNet
 from braindecode.datautil.splitters import split_into_two_sets
 from braindecode.torch_ext.constraints import MaxNormDefaultConstraint
-
+from braindecode.torch_ext.util import set_random_seeds, np_to_var
 log = logging.getLogger(__name__)
+
 
 # Set fixed random seed
 seed=20190706
@@ -35,11 +39,11 @@ torch.backends.cudnn.deterministic = True
 
 
 def run_exp(data_folder, model,  cuda):
+    # parameter initialization
     input_time_length = 750 # 1000
     max_epochs = 1600
     max_increase_epochs = 160
     batch_size = 60
-
     valid_set_fraction = 0.2
     # load data
     X = np.zeros([1])  # np.ndarray([])
@@ -71,60 +75,53 @@ def run_exp(data_folder, model,  cuda):
 
     n_classes = 2
     n_chans = int(train_set.X.shape[1])
-    input_time_length = train_set.X.shape[2]
-    if model == "shallow":
-        model = ShallowFBCSPNet(
-            n_chans,
-            n_classes,
-            input_time_length=input_time_length,
-            final_conv_length="auto",
-        ).create_network()
-    elif model == "deep":
-        model = Deep4Net(
-            n_chans,
-            n_classes,
-            input_time_length=input_time_length,
-            final_conv_length="auto",
-        ).create_network()
+    if model == 'shallow':
+        model = ShallowFBCSPNet(n_chans, n_classes, input_time_length=input_time_length,
+                            final_conv_length=30).create_network()
+    elif model == 'deep':
+        model = Deep4Net(n_chans, n_classes, input_time_length=input_time_length,
+                            final_conv_length=2).create_network()
+
+
+    to_dense_prediction_model(model)
     if cuda:
         model.cuda()
+
     log.info("Model: \n{:s}".format(str(model)))
+    dummy_input = np_to_var(train_set.X[:1, :, :, None])
+    if cuda:
+        dummy_input = dummy_input.cuda()
+    out = model(dummy_input)
+
+    n_preds_per_input = out.cpu().data.numpy().shape[2]
 
     optimizer = optim.Adam(model.parameters())
 
-    # # set_random_seeds(seed=20190706, cuda=cuda)
-    # set_random_seeds(seed=20190706, cuda=False)
+    iterator = CropsFromTrialsIterator(batch_size=batch_size,
+                                       input_time_length=input_time_length,
+                                       n_preds_per_input=n_preds_per_input)
 
-    iterator = BalancedBatchSizeIterator(batch_size=batch_size)
+    stop_criterion = Or([MaxEpochs(max_epochs),
+                         NoDecrease('valid_misclass', max_increase_epochs)])
 
-    stop_criterion = Or(
-        [
-            MaxEpochs(max_epochs),
-            NoDecrease("valid_misclass", max_increase_epochs),
-        ]
-    )
-
-    monitors = [LossMonitor(), MisclassMonitor(), RuntimeMonitor()]
+    monitors = [LossMonitor(), MisclassMonitor(col_suffix='sample_misclass'),
+                CroppedTrialMisclassMonitor(
+                    input_time_length=input_time_length), RuntimeMonitor()]
 
     model_constraint = MaxNormDefaultConstraint()
 
-    exp = Experiment(
-        model,
-        train_set,
-        valid_set,
-        test_set,
-        iterator=iterator,
-        loss_function=F.nll_loss,
-        optimizer=optimizer,
-        model_constraint=model_constraint,
-        monitors=monitors,
-        stop_criterion=stop_criterion,
-        remember_best_column="valid_misclass",
-        run_after_early_stop=True,
-        cuda=cuda,
-    )
-    exp.run()
+    loss_function = lambda preds, targets: F.nll_loss(
+        th.mean(preds, dim=2, keepdim=False), targets)
 
+    exp = Experiment(model, train_set, valid_set, test_set, iterator=iterator,
+                     loss_function=loss_function, optimizer=optimizer,
+                     model_constraint=model_constraint,
+                     monitors=monitors,
+                     stop_criterion=stop_criterion,
+                     remember_best_column='valid_misclass',
+                     run_after_early_stop=True, cuda=cuda)
+    exp.run()
+    return exp
 
 if __name__ == '__main__':
     logging.basicConfig(
@@ -136,10 +133,14 @@ if __name__ == '__main__':
     # Data folder where the datasets are located
     data_folder = 'C:/Users/Administrator/Desktop/Code-SBLEST-main'  # The folder you download from https://github.com/EEGdecoding/Code-SBLEST
 
-    model = "shallow"  # 'shallow' or 'deep'
+    model = "deep"  # 'shallow' or 'deep'
     cuda = True  # True or False
+    time_start = time.time()
     exp = run_exp(data_folder,  model, cuda)
     log.info("Last 5 epochs")
     log.info("\n" + str(exp.epochs_df.iloc[-5:]))
     Accuracy = 1-exp.epochs_df.iloc.obj.test_misclass[-1:]
+    time_end = time.time()
+    mean_acc = np.mean(Accuracy)
+    print('time cost', time_end - time_start, 's')
     print('mean accuracy', Accuracy)

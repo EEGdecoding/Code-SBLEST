@@ -18,23 +18,24 @@ from EEGModels import EEGNet, ShallowConvNet, DeepConvNet
 time_start = time.time()
 
 # TensorFlow configuration for GPU usage
-config = tf.ConfigProto()
+config = tf.compat.v1.ConfigProto()
 config.gpu_options.allow_growth = True
-session = tf.Session(config=config)
+session = tf.compat.v1.Session(config=config)
 
 # Fix random seed
-seed = 20190706
+seed=20190706
 random.seed(seed)
 os.environ['PYTHONHASHSEED'] = str(seed)
 np.random.seed(seed)
-tf.set_random_seed(seed)
+tf.random.set_seed(seed)
 
 log = logging.getLogger(__name__)
 logging.basicConfig(format='%(asctime)s %(levelname)s : %(message)s',
                     level=logging.DEBUG, stream=sys.stdout)
 
 # Data folder where the datasets are located
-data_folder = 'C:/Users/Administrator/Desktop/Code-SBLEST-main'
+data_folder = 'C:/Users/Administrator/Desktop/Code-SBLEST-main' # The folder you download from https://github.com/EEGdecoding/Code-SBLEST
+
 
 # Fraction of data to be used as validation set
 valid_set_fraction= 0.2
@@ -58,8 +59,8 @@ label_1d_train = train['Y_train'].astype(np.int32)
 label_1d_test = test['Y_test'].astype(np.int32)
 train_set.y =convert_numbers_to_one_hot(label_1d_train)
 test_set.y =convert_numbers_to_one_hot(label_1d_test)
-train_set.X = np.transpose(train['X_train'], (2, 1, 0)).astype(np.float32)
-test_set.X = np.transpose(test['X_test'], (2, 1, 0)).astype(np.float32)
+train_set.X = np.transpose(train['X_train'], (2, 0, 1)).astype(np.float32)
+test_set.X = np.transpose(test['X_test'], (2, 0, 1)).astype(np.float32)
 
 # Split train set into train and validation set
 train_set, valid_set = split_into_two_sets(

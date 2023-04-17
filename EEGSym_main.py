@@ -37,7 +37,7 @@ logging.basicConfig(format='%(asctime)s %(levelname)s : %(message)s',
 
 
 # Data folder where the datasets are located
-data_folder = 'C:/Users\Administrator\Desktop\Code-SBLEST-main'
+data_folder = 'C:/Users/Administrator/Desktop/Code-SBLEST-main' # The folder you download from https://github.com/EEGdecoding/Code-SBLEST
 
 # Fraction of data to be used as validation set
 valid_set_fraction= 0.2
@@ -48,7 +48,7 @@ y= np.zeros([1]) # np.ndarray([])
 train_set = SignalAndTarget(X, y)
 test_set = SignalAndTarget(X, y)
 
-bs_EEGSym = 16  # bs_EEGSym = 256 for pre-training (To reduce compute time)
+bs_EEGSym = 16  #
 os.environ['CUDA_VISIBLE_DEVICES'] = " 0"
 pretrained = False  # Parameter to load pre-trained weight values
 ncha=60
@@ -63,8 +63,7 @@ hyperparameters["fs"] = 250
 hyperparameters["input_time"] = 3*1000
 hyperparameters["scales_time"] = np.tile([125, 250, 500], 1)
 hyperparameters['filters_per_branch'] = 8
-hyperparameters['ch_lateral'] = int((ncha / 2) - 1)  # 3/7 For 8/16 electrodes
-# respectively. For the configurations present in the publication.
+hyperparameters['ch_lateral'] = int((ncha / 2) - 1)  #
 hyperparameters['residual'] = True
 hyperparameters['symmetric'] = True
 

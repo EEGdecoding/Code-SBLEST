@@ -34,7 +34,8 @@ logging.basicConfig(format='%(asctime)s %(levelname)s : %(message)s',
                     level=logging.DEBUG, stream=sys.stdout)
 
 # Data folder where the datasets are located
-data_folder = 'C:/Users\Administrator\Desktop\Code-SBLEST-main'
+data_folder = 'C:/Users/Administrator/Desktop/Code-SBLEST-main' # The folder you download from https://github.com/EEGdecoding/Code-SBLEST
+
 
 # Fraction of data to be used as validation set
 valid_set_fraction= 0.2
