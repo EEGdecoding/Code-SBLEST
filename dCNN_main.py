@@ -43,7 +43,7 @@ def run_exp(data_folder, model,  cuda):
     input_time_length = 750 # 1000
     max_epochs = 1600
     max_increase_epochs = 160
-    batch_size = 60
+    batch_size = 16
     valid_set_fraction = 0.2
     # load data
     X = np.zeros([1])  # np.ndarray([])
