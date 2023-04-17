@@ -99,7 +99,7 @@ early_stopping = EarlyStopping(
     restore_best_weights=True)
 
 # Train the model
-fittedModel = model.fit(X_train, Y_train, batch_size=60, epochs=500,
+fittedModel = model.fit(X_train, Y_train, batch_size=16, epochs=500,
                         verbose=2, validation_data=(X_validate, Y_valid),callbacks=[early_stopping]
                       )
 
