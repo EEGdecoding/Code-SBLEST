@@ -1,11 +1,12 @@
 # Code-SBLEST
 
-This repo provides the MATLAB code for the Sparse Bayesian Learning for End-to-end Spatio-Temporal-filtering-based single-trial EEG
-classification (SBLEST) algorithm, which is presented in “W. Wang, F. Qi, D. Wipf, C. Can, T. Yu, Z. Gu, Y. Li, Z. Yu, W. Wu. Sparse Bayesian Learning for End-to-End EEG Decoding (under review)”. 
+This repo contains MATLAB code for the SBLEST (Sparse Bayesian Learning for End-to-End Spatio-Temporal-Filtering-Based Single-Trial EEG Classification) algorithm, as well as implementations of Convolutional Neural Networks (CNNs) used in the paper. Detailed information about the algorithms and CNN implementations can be found in the "Sparse Bayesian Learning for End-to-End EEG Decoding' by W. Wang, F. Qi, D. Wipf, C. Can, T. Yu, Z. Gu, Y. Li, Z. Yu, and W. Wu(under review)". 
 
-All scripts are written in MATLAB and have been tested with MATLAB R2018b.
+## Matlab code for SBLEST
 
-## File Descriptions
+All scripts SBLEST are written in MATLAB and have been tested with MATLAB R2018b.
+
+### File Descriptions
 
 * [SBLEST.m](https://github.com/EEGdecoding/Code-SBLEST/blob/main/SBLEST.m)                                                — Code for the SBLEST algorithm.
 
@@ -15,7 +16,7 @@ All scripts are written in MATLAB and have been tested with MATLAB R2018b.
 
 * [Dataset2_L1_FootTongue_test.mat](https://github.com/EEGdecoding/Code-SBLEST/blob/main/Dataset2_L1_FootTongue_test.mat) —  Test data used in SBLEST_main.m.
 
-## Usage
+### Usage
 
 1. To run the code, download and extract them into a folder of your choice, and navigate to this folder within MATLAB. 
 
@@ -23,3 +24,11 @@ All scripts are written in MATLAB and have been tested with MATLAB R2018b.
  ```
  SBLEST_main
  ```
+ 
+ ## Python implemention for CNNs (sCNN, dCNN, EEGNet, EEG-inception, and EEGSym)
+ 
+sCNN and dCNN are coded in Pytorch using the braindecode packages provided at https://github.com/robintibor/braindecode. 
+
+EEGNet is coded in Tensorflow using keras API with the model provided in https://github.com/vlawhern/arl-eegmodels.
+
+EEG-inception, and EEGSym are also coded in Tensorflow with model provided in https://github.com/esantamariavazquez/EEGInception and https://github.com/Serpeve/EEGSym respectivily.
