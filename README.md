@@ -4,7 +4,7 @@ This repo contains MATLAB code for the SBLEST (Sparse Bayesian Learning for End-
 
 ## Matlab code for SBLEST
 
-All scripts SBLEST are written in MATLAB and have been tested with MATLAB R2018b.
+All scripts for SBLEST are written in MATLAB and have been tested with MATLAB R2018b.
 
 ### File Descriptions
 
