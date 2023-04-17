@@ -25,10 +25,14 @@ All scripts SBLEST are written in MATLAB and have been tested with MATLAB R2018b
  SBLEST_main
  ```
  
- ## Python implemention for CNNs (sCNN, dCNN, EEGNet, EEG-inception, and EEGSym)
+ ## Python Implementation of sCNN, dCNN, EEGNet, EEG-Inception, and EEGSym
  
-sCNN and dCNN are coded in Pytorch using the braindecode packages provided at https://github.com/robintibor/braindecode. 
+sCNN and dCNN are implemented in PyTorch using the braindecode package, which can be found at https://github.com/robintibor/braindecode.
 
-EEGNet is coded in Tensorflow using keras API with the model provided in https://github.com/vlawhern/arl-eegmodels.
+EEGNet is implemented in TensorFlow using the Keras API, with the model provided in https://github.com/vlawhern/arl-eegmodels.
 
-EEG-inception, and EEGSym are also coded in Tensorflow with model provided in https://github.com/esantamariavazquez/EEGInception and https://github.com/Serpeve/EEGSym respectivily.
+EEG-inception and EEGSym are also implemented in TensorFlow, with the models provided in https://github.com/esantamariavazquez/EEGInception and https://github.com/Serpeve/EEGSym respectively.
+
+### File Descriptions
+
+
