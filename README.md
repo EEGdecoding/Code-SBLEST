@@ -29,6 +29,7 @@ The MATLAB scripts provided in this section implement the SBLEST algorithm and h
  SBLEST_main
  ```
 
+
 ## Python code for SBLEST
 
 The Python scripts for SBLEST are implemented in PyTorch and have been tested in Python.
@@ -38,6 +39,7 @@ The Python scripts for SBLEST are implemented in PyTorch and have been tested in
 * [SBLEST_model.py](https://github.com/EEGdecoding/Code-SBLEST/blob/main/SBLEST_model.py)                             —Python code for the SBLEST algorithm.
 
 * [SBLEST_main.py](https://github.com/EEGdecoding/Code-SBLEST/blob/main/SBLEST_main.py)  — An example code for classifying single-trial EEG data using SBLEST in Python.
+
 
 
  
