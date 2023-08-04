@@ -1,20 +1,24 @@
 # Code-SBLEST
 
-This repo contains MATLAB code for the SBLEST (Sparse Bayesian Learning for End-to-End Spatio-Temporal-Filtering-Based Single-Trial EEG Classification) algorithm, as well as implementations of Convolutional Neural Networks (CNNs) used in the paper. Detailed information about the algorithms and CNN implementations can be found in  "W. Wang, F. Qi, D. Wipf, C. Can, T. Yu, Z. Gu, Y. Li, Z. Yu, W. Wu. Sparse Bayesian Learning for End-to-End EEG Decoding (accepted by IEEE Transactions on Pattern Analysis and Machine Intelligence)". 
+This repo contains Matlab and Python code for the SBLEST (Sparse Bayesian Learning for End-to-End Spatio-Temporal-Filtering-Based Single-Trial EEG Classification) algorithm, as well as implementations of Convolutional Neural Networks (CNNs) used in the paper. Detailed information about the algorithms and CNN implementations can be found in  "W. Wang, F. Qi, D. Wipf, C. Can, T. Yu, Z. Gu, Y. Li, Z. Yu, W. Wu. Sparse Bayesian Learning for End-to-End EEG Decoding (accepted by IEEE Transactions on Pattern Analysis and Machine Intelligence)". 
 
-## Matlab code for SBLEST
-
-All scripts for SBLEST are written in MATLAB and have been tested with MATLAB R2018b.
+## Data
+The data used in this repository is from Subject L1 (foot vs. tongue) in Dataset II, as mentioned in the referenced paper.
 
 ### File Descriptions
 
-* [SBLEST.m](https://github.com/EEGdecoding/Code-SBLEST/blob/main/SBLEST.m)                                                — Code for the SBLEST algorithm.
+* [Dataset2_L1_FootTongue_train.mat](https://github.com/EEGdecoding/Code-SBLEST/blob/main/Dataset2_L1_FootTongue_train.mat) — This file contains the training data used in this repository.
+* [Dataset2_L1_FootTongue_test.mat](https://github.com/EEGdecoding/Code-SBLEST/blob/main/Dataset2_L1_FootTongue_test.mat) —  This file contains the test data used in this repository.
 
-* [SBLEST_main.m](https://github.com/EEGdecoding/Code-SBLEST/blob/main/SBLEST_main.m)  — An example code for classifying single-trial EEG data using SBLEST.
+## Matlab code for SBLEST
 
-* [Dataset2_L1_FootTongue_train.mat](https://github.com/EEGdecoding/Code-SBLEST/blob/main/Dataset2_L1_FootTongue_train.mat) — Training data used in SBLEST_main.m. The data is from Subject L1 (foot vs. tongue) in Dataset II used in the paper.
+The MATLAB scripts provided in this section implement the SBLEST algorithm and have been tested with MATLAB R2018b.
 
-* [Dataset2_L1_FootTongue_test.mat](https://github.com/EEGdecoding/Code-SBLEST/blob/main/Dataset2_L1_FootTongue_test.mat) —  Test data used in SBLEST_main.m.
+### File Descriptions
+
+* [SBLEST.m](https://github.com/EEGdecoding/Code-SBLEST/blob/main/SBLEST.m)                                           —Matlab code for the SBLEST algorithm.
+
+* [SBLEST_main.m](https://github.com/EEGdecoding/Code-SBLEST/blob/main/SBLEST_main.m)  — An example code for classifying single-trial EEG data using SBLEST in Matlab.
 
 ### Usage
 
@@ -24,6 +28,18 @@ All scripts for SBLEST are written in MATLAB and have been tested with MATLAB R2
  ```
  SBLEST_main
  ```
+
+## Python code for SBLEST
+
+The Python scripts for SBLEST are implemented in PyTorch and have been tested in Python.
+
+### File Descriptions
+
+* [SBLEST_model.py](https://github.com/EEGdecoding/Code-SBLEST/blob/main/SBLEST_model.py)                             —Python code for the SBLEST algorithm.
+
+* [SBLEST_main.py](https://github.com/EEGdecoding/Code-SBLEST/blob/main/SBLEST_main.py)  — An example code for classifying single-trial EEG data using SBLEST in Python.
+
+
  
  ## Python Implementations of sCNN, dCNN, EEGNet, EEG-Inception, and EEGSym
  
