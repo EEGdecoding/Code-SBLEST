@@ -32,7 +32,7 @@ The MATLAB scripts provided in this section implement the SBLEST algorithm and h
 
 ## Python code for SBLEST
 
-The Python scripts for SBLEST are implemented in PyTorch and have been fully tested.
+The Python scripts for SBLEST are implemented in PyTorch and have been fully tested with Python 3.9.
 
 ### File Descriptions
 
