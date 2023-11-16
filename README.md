@@ -1,6 +1,6 @@
 # Code-SBLEST
 
-This repo contains Matlab and Python code for the SBLEST (Sparse Bayesian Learning for End-to-End Spatio-Temporal-Filtering-Based Single-Trial EEG Classification) algorithm, as well as implementations of Convolutional Neural Networks (CNNs) used in the paper. Detailed information about the algorithms and CNN implementations can be found in [W. Wang, F. Qi, D. Wipf, C. Can, T. Yu, Z. Gu, Y. Li, Z. Yu, W. Wu. Sparse Bayesian Learning for End-to-End EEG Decoding, IEEE Transactions on Pattern Analysis and Machine Intelligence, 2023, 10.1109/tpami.2023.3299568](https://doi.org/10.1109/tpami.2023.3299568). 
+This repo contains Matlab and Python code for the SBLEST (Sparse Bayesian Learning for End-to-End Spatio-Temporal-Filtering-Based Single-Trial EEG Classification) algorithm, as well as implementations of Convolutional Neural Networks (CNNs) used in the paper. Detailed information about the algorithms and CNN implementations can be found in [W. Wang, F. Qi, D. Wipf, C. Can, T. Yu, Z. Gu, Y. Li, Z. Yu, W. Wu. Sparse Bayesian Learning for End-to-End EEG Decoding, IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 45, no. 12, pp. 15632-15649, Dec. 2023, doi: 10.1109/TPAMI.2023.3299568](https://doi.org/10.1109/tpami.2023.3299568). 
 
 ## Data
 The data used in this repository is from Subject L1 (foot vs. tongue) in Dataset II, as mentioned in the referenced paper.
